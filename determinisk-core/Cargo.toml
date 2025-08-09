@@ -1,0 +1,59 @@
+[package]
+name = "determinisk-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+fixed = { workspace = true }
+serde = { workspace = true }
+sha2 = { workspace = true }
+
+[dev-dependencies]
+proptest = { workspace = true }
+criterion = { workspace = true }
+
+[features]
+default = ["std"]
+std = []
+risc0 = ["dep:risc0-zkvm"]
+sp1 = ["dep:sp1-sdk"]
+
+# Optional dependencies
+[dependencies.risc0-zkvm]
+workspace = true
+optional = true
+
+[dependencies.sp1-sdk]
+workspace = true
+optional = true
+
+[[example]]
+name = "simple_drop"
+
+[[example]]
+name = "multiple_balls"
+
+[[example]]
+name = "projectile"
+
+[[example]]
+name = "pendulum"
+
+[[example]]
+name = "energy_conservation"
+
+[[example]]
+name = "determinism_proof"
+
+[[example]]
+name = "benchmark"
+
+[[example]]
+name = "orbit"
+
+[[example]]
+name = "orbit_simple"
+
