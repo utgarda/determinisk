@@ -1,34 +1,24 @@
 [package]
 name = "determinisk-core"
-version.workspace = true
-edition.workspace = true
-authors.workspace = true
-license.workspace = true
-repository.workspace = true
+version = "0.1.0"
+edition = "2021"
+authors = ["Evgenii Tsvigun <gene@chainhackers.xyz>"]
+license = "MIT"
+repository = "https://github.com/utgarda/determinisk"
+description = "Deterministic 2D physics engine for zkVM"
 
 [dependencies]
-fixed = { workspace = true }
-serde = { workspace = true }
-sha2 = { workspace = true }
+fixed = { version = "1.28", default-features = false, features = ["serde"] }
+serde = { version = "1.0", default-features = false, features = ["derive"] }
+sha2 = { version = "0.10", default-features = false }
 
 [dev-dependencies]
-proptest = { workspace = true }
-criterion = { workspace = true }
+proptest = "1.5"
+criterion = "0.5"
 
 [features]
 default = ["std"]
-std = []
-risc0 = ["dep:risc0-zkvm"]
-sp1 = ["dep:sp1-sdk"]
-
-# Optional dependencies
-[dependencies.risc0-zkvm]
-workspace = true
-optional = true
-
-[dependencies.sp1-sdk]
-workspace = true
-optional = true
+std = ["fixed/std", "serde/std", "sha2/std"]
 
 [[example]]
 name = "simple_drop"
