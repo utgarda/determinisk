@@ -179,7 +179,7 @@ cargo flamegraph --bench physics_bench
 ## Commit Standards
 
 Use semantic commit messages following this format:
-- `feat:` New feature
+- `feat:` New feature (use "add" for new functionality, not "implement")
 - `fix:` Bug fix
 - `docs:` Documentation changes
 - `style:` Code style changes (formatting, missing semicolons, etc.)
@@ -190,6 +190,7 @@ Use semantic commit messages following this format:
 
 Examples:
 - `feat: add collision detection with spatial hashing`
+- `feat: add SP1 zkVM proof generation` (not "implement")
 - `fix: correct energy calculation in pendulum example`
 - `test: add determinism tests for multi-body scenarios`
 

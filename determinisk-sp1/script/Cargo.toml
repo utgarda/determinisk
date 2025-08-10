@@ -1,0 +1,21 @@
+[package]
+name = "determinisk-sp1-script"
+version = "0.1.0"
+edition = "2021"
+authors = ["Evgenii Tsvigun <gene@chainhackers.xyz>"]
+license = "MIT"
+
+[[bin]]
+name = "host"
+path = "src/main.rs"
+
+[dependencies]
+sp1-sdk = "5.2.1"
+sp1-prover = "5.2.1"
+determinisk-core = { version = "0.1.0" }
+serde_json = "1.0"
+clap = { version = "4.0", features = ["derive"] }
+dotenv = "0.15.0"
+
+[build-dependencies]
+sp1-build = "5.2.1"

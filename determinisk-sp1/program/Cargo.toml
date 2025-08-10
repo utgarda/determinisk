@@ -1,0 +1,10 @@
+[package]
+name = "determinisk-sp1-program"
+version = "0.1.0"
+edition = "2021"
+authors = ["Evgenii Tsvigun <gene@chainhackers.xyz>"]
+license = "MIT"
+
+[dependencies]
+sp1-zkvm = "5.2.1"
+determinisk-core = { version = "0.1.0", default-features = false }

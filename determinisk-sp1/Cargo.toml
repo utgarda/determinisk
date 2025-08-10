@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = ["program", "script"]
+
+# Override dependencies with local versions
+[patch.crates-io]
+determinisk-core = { path = "../determinisk-core" }
+
+# Always optimize; building and running the guest takes much longer without optimization.
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+debug = 1
+lto = true
