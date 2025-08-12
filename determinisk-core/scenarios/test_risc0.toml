@@ -1,0 +1,15 @@
+world_width = 50.0
+world_height = 50.0
+gravity = [0.0, -9.81]
+timestep = 0.016666667
+restitution = 0.8
+position_correction = 0.8
+num_steps = 10
+record_trajectory = false
+seed = 0
+
+[[circles]]
+position = [25.0, 40.0]
+velocity = [0.0, 0.0]
+radius = 2.0
+mass = 1.0

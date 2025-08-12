@@ -1,0 +1,86 @@
+world_width = 30.0
+world_height = 20.0
+gravity = [0.0, 0.0]
+timestep = 0.016666667
+restitution = 0.95
+position_correction = 0.8
+num_steps = 600
+record_trajectory = true
+seed = 0
+
+# Cue ball
+[[circles]]
+position = [5.0, 10.0]
+velocity = [15.0, 0.1]
+radius = 0.5
+mass = 1.2
+
+# Apex ball
+[[circles]]
+position = [20.0, 10.0]
+velocity = [0.0, 0.0]
+radius = 0.5
+mass = 1.0
+
+# Row 2, ball 1
+[[circles]]
+position = [20.866, 9.5]
+velocity = [0.0, 0.0]
+radius = 0.5
+mass = 1.0
+
+# Row 2, ball 2
+[[circles]]
+position = [20.866, 10.5]
+velocity = [0.0, 0.0]
+radius = 0.5
+mass = 1.0
+
+# Row 3, ball 1
+[[circles]]
+position = [21.732, 9.0]
+velocity = [0.0, 0.0]
+radius = 0.5
+mass = 1.0
+
+# Row 3, ball 2
+[[circles]]
+position = [21.732, 10.0]
+velocity = [0.0, 0.0]
+radius = 0.5
+mass = 1.0
+
+# Row 3, ball 3
+[[circles]]
+position = [21.732, 11.0]
+velocity = [0.0, 0.0]
+radius = 0.5
+mass = 1.0
+
+# Row 4, ball 1
+[[circles]]
+position = [22.598, 8.5]
+velocity = [0.0, 0.0]
+radius = 0.5
+mass = 1.0
+
+# Row 4, ball 2
+[[circles]]
+position = [22.598, 9.5]
+velocity = [0.0, 0.0]
+radius = 0.5
+mass = 1.0
+
+# Row 4, ball 3
+[[circles]]
+position = [22.598, 10.5]
+velocity = [0.0, 0.0]
+radius = 0.5
+mass = 1.0
+
+# Row 4, ball 4
+[[circles]]
+position = [22.598, 11.5]
+velocity = [0.0, 0.0]
+radius = 0.5
+mass = 1.0

@@ -6,29 +6,8 @@ use alloc::vec::Vec;
 
 risc0_zkvm::guest::entry!(main);
 use risc0_zkvm::guest::env;
-use determinisk_core::{World, Circle, Vec2, Scalar};
+use determinisk_core::{World, SimulationInput};
 use serde::{Deserialize, Serialize};
-
-/// Input configuration for physics simulation
-#[derive(Debug, Clone, Serialize, Deserialize)]
-struct SimulationInput {
-    /// World dimensions
-    width: f32,
-    height: f32,
-    /// Initial circles configuration
-    circles: Vec<CircleConfig>,
-    /// Number of simulation steps
-    steps: u32,
-}
-
-/// Circle configuration for initialization
-#[derive(Debug, Clone, Serialize, Deserialize)]
-struct CircleConfig {
-    position: (f32, f32),
-    velocity: (f32, f32),
-    radius: f32,
-    mass: f32,
-}
 
 /// Output state after simulation
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -45,28 +24,11 @@ fn main() {
     // Read simulation input
     let input: SimulationInput = env::read();
     
-    // Initialize world
-    let mut world = World::new(input.width, input.height);
-    
-    // Add circles to world
-    for config in input.circles {
-        let mut circle = Circle::new(
-            Vec2::new(config.position.0, config.position.1),
-            Scalar::from_float(config.radius),
-            Scalar::from_float(config.mass),
-        );
-        
-        // Set initial velocity
-        circle.set_velocity(
-            Vec2::new(config.velocity.0, config.velocity.1),
-            world.timestep,
-        );
-        
-        world.add_circle(circle);
-    }
+    // Initialize world from input using the unified constructor
+    let mut world = World::from_input(&input);
     
     // Run simulation for specified steps
-    for _ in 0..input.steps {
+    for _ in 0..input.num_steps {
         world.step();
     }
     
@@ -95,7 +57,7 @@ fn main() {
     // Prepare output
     let output = SimulationOutput {
         final_positions,
-        steps_executed: input.steps,
+        steps_executed: input.num_steps,
         state_hash,
     };
     

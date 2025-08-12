@@ -11,6 +11,14 @@ path = "../examples/verify_physics.rs"
 name = "verify_physics_full"
 path = "../examples/verify_physics_full.rs"
 
+[[bin]]
+name = "host-unified"
+path = "src/main_unified.rs"
+
+[[bin]]
+name = "test-minimal"
+path = "src/test_minimal.rs"
+
 [dependencies]
 methods = { path = "../methods" }
 risc0-zkvm = { version = "^2.3.1" }
