@@ -45,6 +45,11 @@ impl Vec2 {
         Vec2 { x, y }
     }
     
+    /// Squared length (same as magnitude_squared, for consistency)
+    pub fn length_squared(&self) -> Scalar {
+        self.magnitude_squared()
+    }
+    
     /// Dot product
     pub fn dot(&self, other: &Vec2) -> Scalar {
         self.x * other.x + self.y * other.y
@@ -98,6 +103,15 @@ impl Add for Vec2 {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
         }
+    }
+}
+
+use core::ops::AddAssign;
+
+impl AddAssign for Vec2 {
+    fn add_assign(&mut self, rhs: Self) {
+        self.x = self.x + rhs.x;
+        self.y = self.y + rhs.y;
     }
 }
 

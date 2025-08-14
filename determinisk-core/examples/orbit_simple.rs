@@ -9,7 +9,7 @@ fn main() {
     
     // Create a body in circular orbit
     let center = Vec2::new(100.0, 100.0);
-    let radius = 50.0;
+    let _radius = 50.0;
     
     let mut orbiter = Circle::new(
         Vec2::new(150.0, 100.0),  // Start at right side
@@ -57,7 +57,7 @@ fn main() {
         // Print status every 20 steps
         if step % 20 == 0 {
             let dist = (pos - center).magnitude().to_float();
-            let vel = world.circles[0].velocity(world.timestep);
+            let vel = world.circles[0].velocity;
             let speed = vel.magnitude().to_float();
             
             println!("{:4} | {:5.1} | {:5.1} | {:8.2} | {:5.2}", 

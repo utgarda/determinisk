@@ -50,14 +50,22 @@ impl Scalar {
         Scalar(self.0.abs())
     }
     
+    /// Convert to integer
+    pub fn to_int(&self) -> i32 {
+        self.0.to_num()
+    }
+    
     /// Square root using Newton-Raphson method
     pub fn sqrt(&self) -> Self {
         if self.0 <= I16F16::ZERO {
             return Scalar::ZERO;
         }
         
-        // Initial guess: right shift by 1 (divide by 2)
+        // Initial guess: right shift by 1 (divide by 2), but ensure it's not zero
         let mut guess = Scalar(self.0 >> 1);
+        if guess.0 == I16F16::ZERO {
+            guess = Scalar::ONE;
+        }
         
         // Newton-Raphson iterations
         for _ in 0..8 {

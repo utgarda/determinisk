@@ -13,7 +13,7 @@ fn main() {
     println!("Launching {} projectiles at different angles...", launch_angles.len());
     
     // Create projectiles with different launch angles
-    for (i, &angle) in launch_angles.iter().enumerate() {
+    for (_i, &angle) in launch_angles.iter().enumerate() {
         let mut ball = Circle::new(
             Vec2::new(10.0, 10.0),  // Start near ground
             Scalar::from_float(2.0), // Small radius
@@ -40,7 +40,7 @@ fn main() {
     println!("------|------------|-------");
     
     // Simulate until all projectiles land
-    for step in 0..600 {  // 10 seconds max
+    for _step in 0..600 {  // 10 seconds max
         world.step();
         
         // Update tracking

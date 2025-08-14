@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "determinisk-core",
+    "determinisk-runner",
 ]
 exclude = [
     "determinisk-risc0",

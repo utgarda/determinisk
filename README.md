@@ -91,10 +91,10 @@ determinisk/
 cd determinisk-risc0
 
 # Generate a single proof
-cargo run --bin host
+cargo run --package host --bin host
 
 # Generate multiple proofs with different scenarios
-cargo run --example verify_physics
+cargo run --package host --example verify_physics_full
 ```
 
 ### Run Physics Examples (without proofs)

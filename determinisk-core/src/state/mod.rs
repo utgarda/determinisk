@@ -1,7 +1,7 @@
 //! State management and serialization
 
 #[cfg(not(feature = "std"))]
-use alloc::{vec::Vec, string::String};
+use alloc::vec::Vec;
 #[cfg(feature = "std")]
 use std::vec::Vec;
 

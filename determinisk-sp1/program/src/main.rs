@@ -44,7 +44,7 @@ pub fn main() {
     
     // Commit final state to public output
     let final_pos = world.circles[0].position;
-    let final_vel = world.circles[0].velocity(world.timestep);
+    let final_vel = world.circles[0].velocity;
     
     sp1_zkvm::io::commit(&final_pos.x.to_bits());
     sp1_zkvm::io::commit(&final_pos.y.to_bits());

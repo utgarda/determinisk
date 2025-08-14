@@ -94,7 +94,6 @@ fn main() {
         .expect("Failed to generate proof");
 
     let proving_time = start_time.elapsed();
-    println!("Proof generated in: {:?}", proving_time);
 
     // Extract the receipt
     let receipt = prove_info.receipt;
@@ -114,23 +113,29 @@ fn main() {
         println!("  Circle {}: ({:.2}, {:.2})", i, x_float, y_float);
     }
 
-    // Print proof statistics
-    println!("\nProof Statistics:");
-    println!("Total cycles: {}", prove_info.stats.total_cycles);
-    println!("User cycles: {}", prove_info.stats.user_cycles);
-    println!("Segments: {}", prove_info.stats.segments);
+    // Serialize the proof to get actual size
+    let proof_bytes = bincode::serialize(&receipt).unwrap();
+    let proof_size = proof_bytes.len();
 
     // Verify the proof
     println!("\nVerifying proof...");
+    let verify_start = std::time::Instant::now();
     receipt
         .verify(PHYSICS_GUEST_ID)
         .expect("Proof verification failed");
+    let verify_time = verify_start.elapsed();
     
     println!("✓ Proof verified successfully!");
 
-    // The proof can be serialized for storage or transmission
-    let proof_bytes = bincode::serialize(&receipt).unwrap();
-    println!("\nProof size: {} bytes", proof_bytes.len());
+    // Display actual proof metrics
+    println!("\n=== ACTUAL PROOF METRICS ===");
+    println!("Backend: RISC Zero");
+    println!("Total cycles: {}", prove_info.stats.total_cycles);
+    println!("User cycles: {}", prove_info.stats.user_cycles);
+    println!("Segments: {}", prove_info.stats.segments);
+    println!("Proof size: {} bytes ({:.1} KB)", proof_size, proof_size as f32 / 1024.0);
+    println!("Proving time: {:.2}s", proving_time.as_secs_f32());
+    println!("Verification time: {:.3}s", verify_time.as_secs_f32());
 }
 
 /// Example of verifying a proof from serialized data

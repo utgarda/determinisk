@@ -8,7 +8,7 @@ fn calculate_total_energy(world: &World) -> f32 {
     
     for circle in &world.circles {
         // Kinetic energy: 0.5 * m * v^2
-        let velocity = circle.velocity(world.timestep);
+        let velocity = circle.velocity;
         let speed_squared = velocity.magnitude_squared().to_float();
         let ke = 0.5 * circle.mass.to_float() * speed_squared;
         
@@ -27,7 +27,7 @@ fn calculate_total_momentum(world: &World) -> Vec2 {
     let mut total = Vec2::ZERO;
     
     for circle in &world.circles {
-        let velocity = circle.velocity(world.timestep);
+        let velocity = circle.velocity;
         let momentum = velocity * circle.mass;
         total = total + momentum;
     }
@@ -249,7 +249,7 @@ fn test_galilean_relativity() {
     );
     
     // Horizontal velocity should be preserved in world2
-    let vx2 = world2.circles[0].velocity(world2.timestep).x.to_float();
+    let vx2 = world2.circles[0].velocity.x.to_float();
     assert!(
         (vx2 - 20.0).abs() < 0.1,
         "Horizontal velocity not preserved: {:.3}",

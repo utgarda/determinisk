@@ -149,7 +149,7 @@ fn test_energy_conservation() {
     
     // Calculate final energy
     let final_height = world.circles[0].position.y.to_float();
-    let velocity = world.circles[0].velocity(world.timestep);
+    let velocity = world.circles[0].velocity;
     let speed = velocity.magnitude().to_float();
     let final_pe = 9.81 * final_height;
     let final_ke = 0.5 * speed * speed;
@@ -273,7 +273,7 @@ fn test_velocity_preservation_horizontal() {
     }
     
     // Horizontal velocity should be preserved (no horizontal forces)
-    let velocity = world.circles[0].velocity(world.timestep);
+    let velocity = world.circles[0].velocity;
     assert!((velocity.x.to_float() - 20.0).abs() < 0.1,
         "Horizontal velocity not preserved: {}", velocity.x.to_float());
 }
@@ -303,7 +303,7 @@ fn test_boundary_stop() {
     );
     
     // Velocity should be near zero
-    let velocity = world.circles[0].velocity(world.timestep);
+    let velocity = world.circles[0].velocity;
     let speed = velocity.magnitude().to_float();
     assert!(speed < 0.1, "Ball still moving: speed={}", speed);
 }

@@ -8,6 +8,7 @@ use serde::{Serialize, Deserialize};
 pub struct Circle {
     pub position: Vec2,
     pub old_position: Vec2,  // For Verlet integration
+    pub velocity: Vec2,       // Cached velocity for collision calculations
     pub radius: Scalar,
     pub mass: Scalar,
     pub restitution: Scalar,
@@ -20,6 +21,7 @@ impl Circle {
         Circle {
             position,
             old_position: position,
+            velocity: Vec2::ZERO,
             radius,
             mass,
             restitution: Scalar::from_float(0.5),
@@ -27,9 +29,9 @@ impl Circle {
         }
     }
     
-    /// Get current velocity from position history
-    pub fn velocity(&self, dt: Scalar) -> Vec2 {
-        (self.position - self.old_position) / dt
+    /// Update velocity from position history
+    pub fn update_velocity(&mut self, dt: Scalar) {
+        self.velocity = (self.position - self.old_position) / dt;
     }
     
     /// Set velocity by adjusting old_position

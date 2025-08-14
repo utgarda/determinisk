@@ -101,7 +101,7 @@ fn run_simulation<P: sp1_prover::components::SP1ProverComponents>(
         let proof = client.prove(&pk, &stdin, sp1_sdk::SP1ProofMode::Core)
             .expect("Failed to generate proof");
         
-        let elapsed = start.elapsed();
+        let proving_time = start.elapsed();
 
         // Extract public outputs from the proof
         let mut public_values = proof.public_values.clone();
@@ -120,13 +120,25 @@ fn run_simulation<P: sp1_prover::components::SP1ProverComponents>(
             Scalar::from_bits(final_vy).to_float()
         );
         println!("  Steps: {}", steps);
-        println!("  Proof generation time: {:.2}s", elapsed.as_secs_f32());
+        
+        // Serialize proof to get actual size
+        let proof_bytes = bincode::serialize(&proof).expect("Failed to serialize proof");
+        let proof_size = proof_bytes.len();
         
         // Verify the proof
         println!("  Verifying proof...");
+        let verify_start = std::time::Instant::now();
         client.verify(&proof, &pk.vk)
             .expect("Failed to verify proof");
+        let verify_time = verify_start.elapsed();
         println!("  ✓ Proof verified successfully!");
+        
+        // Display actual proof metrics
+        println!("\n  === ACTUAL PROOF METRICS ===");
+        println!("  Backend: SP1");
+        println!("  Proof size: {} bytes ({:.1} KB)", proof_size, proof_size as f32 / 1024.0);
+        println!("  Proving time: {:.2}s", proving_time.as_secs_f32());
+        println!("  Verification time: {:.3}s", verify_time.as_secs_f32());
         
     } else {
         // Just execute without proof
@@ -153,6 +165,10 @@ fn run_simulation<P: sp1_prover::components::SP1ProverComponents>(
         );
         println!("  Steps: {}", steps);
         println!("  Execution time: {:.2}s", elapsed.as_secs_f32());
-        println!("  Cycles: {}", report.total_instruction_count());
+        
+        // Display execution metrics
+        println!("\n  === EXECUTION METRICS ===");
+        println!("  Total cycles: {}", report.total_instruction_count());
+        println!("  (Run with --prove to generate actual proof and see proof metrics)");
     }
 }

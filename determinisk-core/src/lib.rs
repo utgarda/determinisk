@@ -13,9 +13,18 @@ pub mod physics;
 pub mod spatial;
 pub mod state;
 
+#[cfg(feature = "std")]
+pub mod scenarios;
+
 #[cfg(test)]
 mod tests;
 
 pub use math::{Scalar, Vec2};
-pub use physics::{Circle, World};
-pub use state::SimulationState;
+pub use physics::{Circle, World, CollisionConfig, resolve_all_collisions};
+pub use spatial::{SpatialGrid, Collision, BoundaryCollision};
+pub use state::{
+    SimulationState, CircleState, 
+    SimulationInput, CircleConfig,
+    SimulationOutput, SimulationMetrics,
+    SimulationTrace,
+};

@@ -1,6 +1,6 @@
 //! Macroquad-based visualizer for simulation traces
 
-use crate::state::{SimulationTrace, CircleState};
+use determinisk_core::{SimulationTrace, CircleState};
 use macroquad::prelude::*;
 use serde::{Serialize, Deserialize};
 
@@ -22,7 +22,7 @@ pub struct Visualizer {
     trace: SimulationTrace,
     current_frame: usize,
     playing: bool,
-    playback_speed: f32,
+    _playback_speed: f32,
     show_trails: bool,
     show_velocities: bool,
     show_metrics: bool,
@@ -37,7 +37,7 @@ impl Visualizer {
             trace,
             current_frame: 0,
             playing: true,
-            playback_speed: 1.0,
+            _playback_speed: 1.0,
             show_trails: true,
             show_velocities: true,
             show_metrics: true,
@@ -52,7 +52,7 @@ impl Visualizer {
             trace,
             current_frame: 0,
             playing: true,
-            playback_speed: 1.0,
+            _playback_speed: 1.0,
             show_trails: true,
             show_velocities: true,
             show_metrics: true,
@@ -335,8 +335,8 @@ impl Visualizer {
             
             // Memory usage
             draw_text("MEMORY USAGE", x, 300.0, 18.0, YELLOW);
-            let circle_size = std::mem::size_of::<crate::Circle>();
-            let state_size = std::mem::size_of::<crate::SimulationState>();
+            let circle_size = std::mem::size_of::<determinisk_core::Circle>();
+            let state_size = std::mem::size_of::<determinisk_core::SimulationState>();
             draw_text(&format!("Circle struct: {} bytes", 
                 circle_size), x, 320.0, 16.0, WHITE);
             draw_text(&format!("State struct: {} bytes", 
