@@ -12,7 +12,7 @@ determinisk-core = { path = "../determinisk-core" }
 
 # zkVM backends
 methods = { path = "../determinisk-risc0/methods", optional = true }
-risc0-zkvm = { version = "2.3", optional = true }
+risc0-zkvm = { version = "2.3", optional = true, features = ["cuda"] }
 
 # Visualization
 macroquad = { version = "0.4", optional = true }

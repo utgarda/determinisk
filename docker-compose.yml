@@ -1,0 +1,37 @@
+services:
+  risc0-cuda:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: determinisk-risc0-cuda:latest
+    container_name: determinisk-cuda-builder
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - RISC0_PROVER=cuda
+      - RUST_LOG=info
+      - CARGO_HOME=/workspace/.cargo
+    volumes:
+      # Mount source code
+      - .:/workspace
+      # Persist cargo registry cache
+      - cargo-registry:/usr/local/cargo/registry
+      - cargo-git:/usr/local/cargo/git
+      # Persist build cache
+      - sccache:/root/.cache/sccache
+    working_dir: /workspace
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  cargo-registry:
+  cargo-git:
+  sccache:

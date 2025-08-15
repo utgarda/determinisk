@@ -1,0 +1,13 @@
+# Cargo configuration for determinisk project
+
+[env]
+# Use GCC 13 for CUDA compilation (GCC 15 is incompatible with CUDA 12.9)
+# CUDAHOSTCXX = "/var/lib/snapd/snap/bin/gcc-13.gpp"
+NVCC_CCBIN = "cuda-gcc"
+
+# Optional: Set CUDA paths if not in system environment
+# CUDA_HOME = "/opt/cuda"
+
+[build]
+# Optional: Increase parallel jobs for faster builds
+# jobs = 8

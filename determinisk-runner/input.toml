@@ -1,0 +1,21 @@
+# Sample input for physics simulation
+world_width = 100.0
+world_height = 100.0
+gravity = [0.0, 9.81]
+timestep = 0.016
+num_steps = 50
+record_trajectory = true
+seed = 42
+
+[[circles]]
+position = [25.0, 80.0]
+velocity = [10.0, -5.0]
+radius = 3.0
+mass = 1.0
+
+[[circles]]
+position = [75.0, 80.0]
+velocity = [-10.0, -5.0]
+radius = 3.0
+mass = 1.0
+

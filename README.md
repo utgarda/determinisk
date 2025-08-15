@@ -84,7 +84,43 @@ determinisk/
 
 ## Quick Start
 
-### Generate Zero-Knowledge Proofs
+### Build with CUDA Support (Docker)
+
+```bash
+# Build in Docker with CUDA support (solves GCC 15/CUDA incompatibility)
+./build-docker.sh build
+
+# After building, run with GPU-accelerated proving (40x faster than CPU)
+./target/release/runner run determinisk-runner/input.toml --prove --backend risc0 --verbose
+
+# Or use built-in scenarios
+./target/release/runner run pool_break --prove --backend risc0 --verbose
+```
+
+### Run Physics Simulation with Visualization and RISC Zero Proofs
+
+```bash
+# Navigate to runner directory
+cd determinisk-runner
+
+# Run with RISC Zero real proofs and visualization (CPU proving ~80s)
+cargo run --release --features risc0 --bin visual -- input.toml
+
+# Or use a built-in scenario
+cargo run --release --features risc0 --bin visual -- pool_break
+```
+
+### Run Simulation Without Visualization
+
+```bash
+# Run with proof generation and verification (CUDA accelerated: ~2s)
+../target/release/runner run input.toml --prove --backend risc0 --verbose
+
+# Run without proof generation
+cargo run --release --features risc0 --bin runner run input.toml
+```
+
+### Generate Zero-Knowledge Proofs (Legacy)
 
 ```bash
 # Navigate to RISC Zero directory

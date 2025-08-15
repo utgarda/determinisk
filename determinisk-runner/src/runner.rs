@@ -202,7 +202,7 @@ fn generate_proof(
         }
         #[cfg(feature = "risc0")]
         ZkVmBackend::Risc0 => {
-            use methods::PHYSICS_GUEST_ELF;
+            use methods::{PHYSICS_GUEST_ELF, PHYSICS_GUEST_ID};
             use risc0_zkvm::{default_prover, ExecutorEnv};
             
             // Update status
@@ -233,25 +233,44 @@ fn generate_proof(
                     
                     // Extract metrics
                     let receipt = prove_info.receipt;
-                    let journal = receipt.journal.bytes.clone();
                     
-                    // Get cycle count
-                    let total_cycles = receipt.claim()
-                        .as_ref()
-                        .map(|_c| {
-                            // Extract cycle count from the receipt metadata
-                            // This is an approximation - actual format may vary
-                            1_000_000u64 // Default value, adjust based on actual receipt
-                        })
-                        .unwrap_or(1_000_000);
+                    // Verify the proof!
+                    let verify_start = Instant::now();
+                    match receipt.verify(PHYSICS_GUEST_ID) {
+                        Ok(_) => {
+                            if verbose {
+                                println!("✓ Proof verified successfully!");
+                            }
+                        }
+                        Err(e) => {
+                            eprintln!("✗ Proof verification failed: {}", e);
+                        }
+                    }
+                    let verification_time = verify_start.elapsed().as_millis();
+                    
+                    // Get actual proof size (serialized receipt)
+                    let proof_bytes = bincode::serialize(&receipt).unwrap_or_default();
+                    let proof_size = proof_bytes.len();
+                    
+                    // Get cycle count from stats
+                    let stats = prove_info.stats;
+                    let total_cycles = stats.total_cycles;
+                    let user_cycles = stats.user_cycles;
+                    let segments = stats.segments;
+                    
+                    if verbose {
+                        println!("Proof size: {} KB", proof_size / 1024);
+                        println!("Total cycles: {}", total_cycles);
+                        println!("Segments: {}", segments);
+                    }
                     
                     ProofMetrics {
                         total_cycles,
-                        user_cycles: Some(total_cycles * 8 / 10),
-                        segments: 1,
-                        proof_size_bytes: journal.len(),
+                        user_cycles: Some(user_cycles),
+                        segments: segments as u32,
+                        proof_size_bytes: proof_size,
                         proving_time_ms: proving_time,
-                        verification_time_ms: Some(10),
+                        verification_time_ms: Some(verification_time),
                         zkvm_backend: "RISC Zero".to_string(),
                     }
                 }
