@@ -257,6 +257,18 @@ fn generate_proof(
                     let proof_bytes = bincode::serialize(&receipt).unwrap_or_default();
                     let proof_size = proof_bytes.len();
                     
+                    // Save proof to file
+                    let timestamp = std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .unwrap_or_default()
+                        .as_secs();
+                    let proof_filename = format!("proof_risc0_{}.bin", timestamp);
+                    if let Err(e) = std::fs::write(&proof_filename, &proof_bytes) {
+                        eprintln!("Failed to save proof to file: {}", e);
+                    } else if verbose {
+                        println!("Proof saved to: {}", proof_filename);
+                    }
+                    
                     // Get cycle count from stats
                     let stats = prove_info.stats;
                     let total_cycles = stats.total_cycles;

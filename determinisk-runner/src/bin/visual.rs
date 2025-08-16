@@ -82,7 +82,7 @@ fn generate_proof(
         }
         #[cfg(feature = "risc0")]
         ZkVmBackend::Risc0 => {
-            use methods::PHYSICS_GUEST_ELF;
+            use methods::{PHYSICS_GUEST_ELF, PHYSICS_GUEST_ID};
             use risc0_zkvm::{default_prover, ExecutorEnv};
             
             // Update status
@@ -114,15 +114,47 @@ fn generate_proof(
                     
                     // Extract metrics
                     let receipt = prove_info.receipt;
-                    let journal = receipt.journal.bytes.clone();
+                    
+                    // Verify the proof
+                    let verify_start = Instant::now();
+                    match receipt.verify(PHYSICS_GUEST_ID) {
+                        Ok(_) => {
+                            if verbose {
+                                println!("✓ Proof verified successfully!");
+                            }
+                        }
+                        Err(e) => {
+                            eprintln!("✗ Proof verification failed: {}", e);
+                        }
+                    }
+                    let verification_time = verify_start.elapsed().as_millis();
+                    
+                    // Get actual proof size and save to file
+                    let proof_bytes = bincode::serialize(&receipt).unwrap_or_default();
+                    let proof_size = proof_bytes.len();
+                    
+                    // Save proof to file
+                    let timestamp = std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .unwrap_or_default()
+                        .as_secs();
+                    let proof_filename = format!("proof_risc0_{}.bin", timestamp);
+                    if let Err(e) = std::fs::write(&proof_filename, &proof_bytes) {
+                        eprintln!("Failed to save proof to file: {}", e);
+                    } else if verbose {
+                        println!("Proof saved to: {}", proof_filename);
+                    }
+                    
+                    // Get actual metrics
+                    let stats = prove_info.stats;
                     
                     ProofMetrics {
-                        total_cycles: 1_000_000, // Approximation
-                        user_cycles: Some(800_000),
-                        segments: 1,
-                        proof_size_bytes: journal.len(),
+                        total_cycles: stats.total_cycles,
+                        user_cycles: Some(stats.user_cycles),
+                        segments: stats.segments as u32,
+                        proof_size_bytes: proof_size,
                         proving_time_ms: proving_time,
-                        verification_time_ms: Some(10),
+                        verification_time_ms: Some(verification_time),
                         zkvm_backend: "RISC Zero".to_string(),
                     }
                 }

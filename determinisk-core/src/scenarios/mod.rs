@@ -7,6 +7,7 @@ use crate::state::SimulationInput;
 
 // Import individual scenarios
 mod pool_break;
+mod pool_break_15;
 mod simple_drop;
 mod three_body_collision;
 mod pool_break_sim;
@@ -14,6 +15,7 @@ mod simple_drop_sim;
 
 // Re-export scenario functions
 pub use pool_break::pool_break;
+pub use pool_break_15::pool_break_15;
 pub use simple_drop::simple_drop;
 pub use three_body_collision::three_body_collision;
 pub use pool_break_sim::pool_break_simulation;
@@ -68,6 +70,7 @@ pub fn from_file<P: AsRef<Path>>(path: P) -> Result<SimulationInput, Box<dyn std
 pub fn get_scenario(name: &str) -> Option<SimulationInput> {
     match name {
         "pool_break" | "pool-break" => Some(pool_break()),
+        "pool_break_15" | "pool-break-15" => Some(pool_break_15()),
         "simple_drop" | "simple-drop" => Some(simple_drop()),
         "three_body" | "three-body" | "three_body_collision" => Some(three_body_collision()),
         "pool_break_sim" | "pool-break-sim" => Some(pool_break_simulation()),
@@ -80,6 +83,7 @@ pub fn get_scenario(name: &str) -> Option<SimulationInput> {
 pub fn list_scenarios() -> Vec<&'static str> {
     vec![
         "pool_break",
+        "pool_break_15",
         "simple_drop",
         "three_body_collision",
         "pool_break_sim",
