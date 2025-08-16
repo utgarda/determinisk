@@ -19,6 +19,8 @@ pub struct RunnerConfig {
     pub backend: ZkVmBackend,
     /// Verbose output
     pub verbose: bool,
+    /// Segment size for RISC Zero proving (power of 2)
+    pub segment_po2: u32,
 }
 
 #[derive(Debug, Clone)]
@@ -73,9 +75,10 @@ impl SimulationRunner {
             let backend = self.config.backend.clone();
             let input_clone = input.clone();
             let verbose = self.config.verbose;
+            let segment_po2 = self.config.segment_po2;
             
             Some(thread::spawn(move || {
-                generate_proof(backend, input_clone, proof_metrics_clone, verbose)
+                generate_proof(backend, input_clone, proof_metrics_clone, verbose, segment_po2)
             }))
         } else {
             None
@@ -163,6 +166,7 @@ fn generate_proof(
     input: SimulationInput,
     metrics: Arc<Mutex<Option<ProofMetrics>>>,
     verbose: bool,
+    #[allow(unused_variables)] segment_po2: u32,
 ) -> Option<ProofMetrics> {
     if verbose {
         println!("Generating proof with backend: {:?}", backend);
@@ -216,10 +220,11 @@ fn generate_proof(
                 zkvm_backend: "RISC Zero (Generating...)".to_string(),
             });
             
-            // Create executor environment with simulation input
+            // Create executor environment with simulation input and segment configuration
             let env = ExecutorEnv::builder()
                 .write(&input)
                 .unwrap()
+                .segment_limit_po2(segment_po2)
                 .build()
                 .unwrap();
             

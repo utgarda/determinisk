@@ -32,6 +32,10 @@ enum Commands {
         #[arg(short, long, default_value = "mock")]
         backend: String,
         
+        /// Segment size for RISC Zero proving (power of 2, default 20 for 6GB GPUs)
+        #[arg(long, default_value = "20")]
+        segment_po2: u32,
+        
         /// Verbose output
         #[arg(long)]
         verbose: bool,
@@ -50,7 +54,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
     
     match cli.command {
-        Commands::Run { input, visual, prove, backend, verbose } => {
+        Commands::Run { input, visual, prove, backend, segment_po2, verbose } => {
             // Load simulation input
             let sim_input = if input.ends_with(".toml") {
                 // Load from TOML file
@@ -76,6 +80,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 prove,
                 backend,
                 verbose,
+                segment_po2,
             };
             
             // Run simulation

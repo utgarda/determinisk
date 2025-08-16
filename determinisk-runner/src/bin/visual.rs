@@ -27,6 +27,10 @@ struct Cli {
     #[arg(short, long, default_value = "mock")]
     backend: String,
     
+    /// Segment size for RISC Zero proving (power of 2, default 20 for 6GB GPUs)
+    #[arg(long, default_value = "20")]
+    segment_po2: u32,
+    
     /// Verbose output
     #[arg(long)]
     verbose: bool,
@@ -38,6 +42,7 @@ fn generate_proof(
     input: SimulationInput,
     metrics: Arc<Mutex<Option<ProofMetrics>>>,
     verbose: bool,
+    #[allow(unused_variables)] segment_po2: u32,
 ) -> Option<ProofMetrics> {
     if verbose {
         println!("Generating proof with backend: {:?}", backend);
@@ -91,10 +96,11 @@ fn generate_proof(
                 zkvm_backend: "RISC Zero (Generating...)".to_string(),
             });
             
-            // Create executor environment with simulation input
+            // Create executor environment with simulation input and segment configuration
             let env = ExecutorEnv::builder()
                 .write(&input)
                 .unwrap()
+                .segment_limit_po2(segment_po2)
                 .build()
                 .unwrap();
             
@@ -191,9 +197,10 @@ async fn main() {
         let metrics_clone = proof_metrics.clone();
         let input_clone = sim_input.clone();
         let verbose = cli.verbose;
+        let segment_po2 = cli.segment_po2;
         
         thread::spawn(move || {
-            generate_proof(backend, input_clone, metrics_clone, verbose)
+            generate_proof(backend, input_clone, metrics_clone, verbose, segment_po2)
         });
     }
     

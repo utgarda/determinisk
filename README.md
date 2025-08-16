@@ -91,10 +91,10 @@ determinisk/
 ./build-docker.sh build
 
 # After building, run with GPU-accelerated proving (40x faster than CPU)
-./target/release/runner run determinisk-runner/input.toml --prove --backend risc0 --verbose
+./target/release/runner run simple_drop --prove --backend risc0 --segment-po2 20 --verbose
 
-# Or use built-in scenarios
-./target/release/runner run pool_break --prove --backend risc0 --verbose
+# Complex scenarios need lower segment size for 6GB GPUs
+./target/release/runner run pool_break --prove --backend risc0 --segment-po2 19 --verbose
 ```
 
 ### Run Physics Simulation with Visualization and RISC Zero Proofs
@@ -113,11 +113,14 @@ cargo run --release --features risc0 --bin visual -- pool_break
 ### Run Simulation Without Visualization
 
 ```bash
-# Run with proof generation and verification (CUDA accelerated: ~2s)
-../target/release/runner run input.toml --prove --backend risc0 --verbose
+# Run with proof generation and verification (GPU accelerated: ~2s for simple scenarios)
+./target/release/runner run simple_drop --prove --backend risc0 --segment-po2 20 --verbose
+
+# List available scenarios
+./target/release/runner list
 
 # Run without proof generation
-cargo run --release --features risc0 --bin runner run input.toml
+./target/release/runner run pool_break --verbose
 ```
 
 ### Generate Zero-Knowledge Proofs (Legacy)
